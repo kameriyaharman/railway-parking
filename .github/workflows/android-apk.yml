@@ -7,6 +7,9 @@ on:
     paths: ["mobile/**", ".github/workflows/android-apk.yml"]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -35,3 +38,11 @@ jobs:
         with:
           name: bksc-parking-apk
           path: mobile/android/app/build/outputs/apk/release/app-release.apk
+      - name: Publish APK as GitHub Release (latest)
+        working-directory: mobile
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp android/app/build/outputs/apk/release/app-release.apk BKSC-Parking.apk
+          gh release delete apk-latest --yes --cleanup-tag || true
+          gh release create apk-latest BKSC-Parking.apk --title "BKSC Parking APK (build ${{ github.run_number }})" --notes "Attendant app — commit ${{ github.sha }}" --latest
