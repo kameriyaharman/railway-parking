@@ -1,0 +1,1 @@
+{ "name": "railway-parking", "private": true, "scripts": { "start": "bun server/index.ts" } }

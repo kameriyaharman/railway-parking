@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f2a4a"><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icon.svg">
+<title>BKSC Parking · Attendant</title>
+<style>
+:root{--p:#0f2a4a;--p2:#1d4f8c;--a:#f59e0b;--g:#16a34a;--r:#dc2626;--bg:#f2f4f8;--card:#fff;--t:#0f172a;--m:#64748b;--b:#e2e8f0}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--t);font-size:15px}
+#app{max-width:520px;margin:0 auto;min-height:100vh;padding-bottom:84px}
+.top{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;padding:18px 16px 22px;border-radius:0 0 22px 22px}
+.top small{opacity:.75}.top h2{margin:4px 0 0;font-size:21px}
+.bar{display:flex;align-items:center;gap:10px;padding:14px 16px;background:#fff;border-bottom:1px solid var(--b);position:sticky;top:0;z-index:5}
+.bar h3{margin:0;font-size:17px;flex:1}.bar .back{border:0;background:#eef2f7;border-radius:10px;width:36px;height:36px;font-size:18px}
+.wrap{padding:14px 16px}.card{background:var(--card);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 1px 2px #0000000d;border:1px solid var(--b)}
+.row{display:flex;gap:10px;align-items:center}.sp{justify-content:space-between}.f1{flex:1}.mut{color:var(--m);font-size:13px}.big{font-size:30px;font-weight:800}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.stats div{background:#ffffff1a;border-radius:12px;padding:8px;text-align:center}.stats b{display:block;font-size:20px}
+.btn{display:block;width:100%;border:0;border-radius:14px;padding:15px;font-size:16px;font-weight:700;background:var(--p2);color:#fff;cursor:pointer}
+.btn.g{background:var(--g)}.btn.r{background:var(--r)}.btn.o{background:#fff;color:var(--p2);border:1.5px solid var(--p2)}.btn.a{background:var(--a);color:#111}.btn:disabled{opacity:.5}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.bigbtn{padding:26px 10px;font-size:18px;border-radius:18px}
+label.l{display:block;font-size:12px;font-weight:600;color:var(--m);margin:12px 0 6px;text-transform:uppercase;letter-spacing:.04em}
+input,select{width:100%;padding:13px 14px;border:1.5px solid var(--b);border-radius:12px;font-size:17px;background:#fff;color:var(--t)}input:focus{outline:2px solid var(--p2);border-color:transparent}
+input.vno{text-transform:uppercase;font-weight:700;letter-spacing:.06em;font-size:20px}
+.seg{display:flex;background:#e8edf4;border-radius:12px;padding:4px}.seg button{flex:1;border:0;background:none;padding:10px;border-radius:9px;font-weight:700;color:var(--m);font-size:15px}.seg button.on{background:#fff;color:var(--p);box-shadow:0 1px 3px #0002}
+.chips{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.chip{border:1.5px solid var(--b);background:#fff;border-radius:12px;padding:10px 2px;text-align:center;font-size:12px;font-weight:600}.chip i{display:block;font-style:normal;font-size:22px}.chip.on{border-color:var(--p2);background:#e8f0fb;color:var(--p2)}
+.tog{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--b)}.tog:last-child{border:0}
+.sw{width:46px;height:27px;border-radius:20px;background:#cbd5e1;position:relative;border:0;flex:none}.sw:after{content:"";position:absolute;width:21px;height:21px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.2s}.sw.on{background:var(--g)}.sw.on:after{left:22px}
+.info{background:#fff7e6;border:1px solid #fde3a7;border-radius:12px;padding:10px 12px;font-size:13px;margin-top:12px}
+.pill{display:inline-block;padding:3px 9px;border-radius:20px;font-size:12px;font-weight:700;background:#e2e8f0}.pill.g{background:#dcfce7;color:#166534}.pill.r{background:#fee2e2;color:#991b1b}.pill.b{background:#dbeafe;color:#1e40af}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--b);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom);z-index:9}
+.nav div{display:flex;max-width:520px;width:100%}.nav button{flex:1;border:0;background:none;padding:9px 0 10px;font-size:11px;color:var(--m);font-weight:600}.nav button i{display:block;font-style:normal;font-size:21px}.nav button.on{color:var(--p2)}
+.slip{background:#fff;border:1px dashed #94a3b8;border-radius:6px;padding:14px;font-family:ui-monospace,Menlo,monospace;font-size:13px;text-align:center;max-width:300px;margin:0 auto}
+.slip .tk{font-size:28px;font-weight:800;margin:6px 0}.slip hr{border:0;border-top:1px dashed #94a3b8}.slip .kv{display:flex;justify-content:space-between;text-align:left}
+.list .it{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--b)}.list .it:last-child{border:0}
+.ico{width:40px;height:40px;border-radius:12px;background:#eef2f7;display:grid;place-items:center;font-size:20px;flex:none}
+.kv2{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f1f5f9}.kv2:last-child{border:0}
+.toast{position:fixed;left:50%;top:16px;transform:translateX(-50%);background:#111827;color:#fff;padding:11px 16px;border-radius:12px;z-index:99;font-size:14px;max-width:90%}
+.amt{font-size:42px;font-weight:800;color:var(--p)}video{width:100%;border-radius:14px;background:#000;max-height:320px;object-fit:cover}
+.qr{display:flex;justify-content:center;padding:8px}.qr img,.qr svg{width:220px;height:220px}
+.logo{width:54px;height:54px;border-radius:16px;background:var(--a);color:var(--p);display:grid;place-items:center;font-weight:900;font-size:30px}
+</style></head><body><div id="app"></div><div class="nav" id="nav" hidden><div></div></div>
+<script src="/qrcode.js"></script>
+<script>
+const $=s=>document.querySelector(s), app=$('#app');
+const TYPES=[['cycle','🚲','Cycle'],['bike','🛵','Bike'],['auto','🛺','Auto'],['car','🚗','Car'],['bus','🚌','Bus']];
+const TL={cycle:'Cycle',bike:'Scooter / Bike',auto:'Auto / Toto',car:'Car',bus:'Bus / Mini bus'};
+const ICO=Object.fromEntries(TYPES.map(t=>[t[0],t[1]]));
+let S={token:localStorage.tok||'',user:JSON.parse(localStorage.user||'null'),home:null,cfg:null};
+let P=Object.assign({method:'rawbt',autoIn:true,autoOut:true,qr:true,paper:58},JSON.parse(localStorage.printer||'{}'));
+const saveP=()=>localStorage.printer=JSON.stringify(P);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const rs=n=>'₹'+Number(n||0).toLocaleString('en-IN');
+const tm=d=>d?new Date(d).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Kolkata'}):'—';
+const dt=d=>d?new Date(d).toLocaleString('en-IN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',timeZone:'Asia/Kolkata'}):'—';
+const dur=m=>{m=Math.max(0,Math.round(m));return m<60?m+' min':Math.floor(m/60)+' h '+String(m%60).padStart(2,'0')+' m'};
+function toast(m,ms=2400){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),ms)}
+async function api(path,body){
+  const r=await fetch(path,{method:body?'POST':'GET',headers:{'content-type':'application/json',authorization:'Bearer '+S.token},body:body?JSON.stringify(body):undefined});
+  const j=await r.json().catch(()=>({error:'Network error'}));
+  if(r.status===401&&!path.includes('login')){logout();throw new Error('Login expired')}
+  if(!r.ok){const e=new Error(j.error||'Error');e.data=j;e.status=r.status;throw e}return j}
+function logout(){localStorage.removeItem('tok');localStorage.removeItem('user');S.token='';S.user=null;go('login')}
+function nav(on){const n=$('#nav');n.hidden=!on;if(!on)return;n.firstChild.innerHTML=[['home','🏠','Home'],['inside','🅿️','Inside'],['scan','📷','Scan'],['shift','🕒','Shift'],['profile','⚙️','Printer']].map(([k,i,l])=>`<button class="${k===cur?'on':''}" onclick="go('${k}')"><i>${i}</i>${l}</button>`).join('')}
+let cur='';
+function go(v,a){cur=v;stopCam();window.scrollTo(0,0);(V[v]||V.home)(a)}
+const bar=(t,b='home')=>`<div class="bar"><button class="back" onclick="go('${b}')">←</button><h3>${t}</h3><span class="mut">${tm(new Date())}</span></div>`;
+
+const V={};
+V.login=async()=>{nav(false);let st=[],c={};try{[st,c]=await Promise.all([api('/api/public/stands'),api('/api/public/config')])}catch(e){}
+app.innerHTML=`<div class="top" style="padding:34px 20px 40px"><div class="logo">P</div><h2 style="margin-top:14px">${esc(c.short||'BKSC')} PARKING</h2><small>Start your shift</small></div>
+<div class="wrap" style="margin-top:-18px"><div class="card"><label class="l">Parking stand</label><select id="st">${st.map(s=>`<option value="${s.id}">${esc(c.station||'')} — ${esc(s.name)}</option>`).join('')}</select>
+<label class="l">Attendant mobile</label><input id="mo" inputmode="numeric" maxlength="10" placeholder="10 digit mobile" value="${esc(localStorage.lastMobile||'')}">
+<label class="l">4-digit PIN</label><input id="pin" type="password" inputmode="numeric" maxlength="4" placeholder="• • • •" style="letter-spacing:.5em;text-align:center;font-size:24px">
+<div style="height:16px"></div><button class="btn" id="lb">Login & start shift</button></div><p class="mut" style="text-align:center">${esc(c.agency||'')} · Attendant app</p></div>`;
+if(localStorage.lastStand)$('#st').value=localStorage.lastStand;
+$('#pin').onkeyup=e=>{if(e.target.value.length===4)$('#lb').click()};
+$('#lb').onclick=async()=>{try{const r=await api('/api/login',{mobile:$('#mo').value,secret:$('#pin').value,standId:$('#st').value});S.token=r.token;S.user=r.user;localStorage.tok=r.token;localStorage.user=JSON.stringify(r.user);localStorage.lastMobile=$('#mo').value;localStorage.lastStand=$('#st').value;go('home')}catch(e){toast(e.message)}}};
+
+V.home=async()=>{nav(true);app.innerHTML='<div class="wrap mut">Loading…</div>';
+let h;try{h=S.home=await api('/api/me');S.cfg=h.config}catch(e){app.innerHTML=`<div class="wrap"><div class="card">${esc(e.message)}<br><br><button class="btn" onclick="go('home')">Retry</button></div></div>`;return}
+const st=h.stats||{},ins=h.inside||{},tot=Object.values(ins).reduce((a,b)=>a+b,0);
+app.innerHTML=`<div class="top"><small>${esc(h.config.station)} · ${esc(h.stand?.name||'')}</small><h2>Hi, ${esc(h.user.name.split(' ')[0])} 👋</h2>
+<div class="row sp" style="margin-top:14px"><div><small>Today's collection (my shift)</small><div class="big">${rs((st.cash||0)+(st.upi||0))}</div></div><span class="pill" style="background:#ffffff22;color:#fff">Shift ${esc(h.user.label||'')}</span></div>
+<div class="stats"><div><b>${st.in||0}</b>IN</div><div><b>${st.out||0}</b>OUT</div><div><b>${tot}</b>INSIDE</div></div></div>
+<div class="wrap"><div class="two" style="margin-bottom:12px"><button class="btn g bigbtn" onclick="go('vin')">⬇ Vehicle IN</button><button class="btn r bigbtn" onclick="go('scan')">⬆ Vehicle OUT</button></div>
+<div class="card"><div class="row sp"><b>Vehicles inside</b><b>${tot}</b></div><div class="list">${TYPES.map(([k,i])=>`<div class="it" onclick="go('inside','${k}')"><div class="ico">${i}</div><div class="f1">${TL[k]}</div><b>${ins[k]||0}</b></div>`).join('')}</div></div>
+<div class="card row sp"><div><b>Pick & Drop today: ${h.pd?.n||0}</b><div class="mut">${h.pd?.free||0} free (within ${h.config.tariff.pdFree} min)</div></div><span style="font-size:26px">🚕</span></div>
+<div class="two"><button class="btn o" onclick="go('profile')">🖨 Printer</button><button class="btn o" onclick="go('scan')">📷 Scan token</button></div></div>`};
+
+// ---------- Vehicle IN ----------
+let IN={kind:'parking',vtype:'bike',helmet:false};
+V.vin=()=>{nav(true);const c=S.cfg||{tariff:{}};const t=c.tariff;
+app.innerHTML=`${bar('Vehicle IN')}<div class="wrap"><div class="card">
+<div class="seg"><button data-k="parking">Parking</button><button data-k="pd">Pick & Drop</button></div>
+<label class="l">Vehicle type</label><div class="chips">${TYPES.map(([k,i,l])=>`<div class="chip" data-t="${k}"><i>${i}</i>${l}</div>`).join('')}</div>
+<label class="l">Vehicle number</label><input id="vno" class="vno" placeholder="JH 09 AK 4521" autocomplete="off">
+<label class="l">Customer mobile (optional)</label><input id="mob" inputmode="numeric" maxlength="10" placeholder="For WhatsApp slip">
+<div class="tog" id="hrow"><div><b>Helmet</b><div class="mut">${rs(t.helmet)} for 24 hrs</div></div><button class="sw" id="hel"></button></div>
+<div class="info" id="rate"></div></div>
+<div class="mut" style="margin:0 4px 10px">🖨 ${P.method==='off'?'Printing OFF':'Printer: '+({ble:'Bluetooth direct',rawbt:'RawBT app',system:'System print'})[P.method]+' · Auto print '+(P.autoIn?'ON':'OFF')}</div>
+<button class="btn g" id="gen">Generate token & print</button></div>`;
+const paint=()=>{document.querySelectorAll('.seg button').forEach(b=>b.classList.toggle('on',b.dataset.k===IN.kind));document.querySelectorAll('.chip').forEach(b=>b.classList.toggle('on',b.dataset.t===IN.vtype));
+$('#hel').classList.toggle('on',IN.helmet);$('#hrow').style.display=IN.kind==='pd'?'none':'';
+const v=IN.vtype;$('#rate').innerHTML=IN.kind==='pd'?`<b>Pick & Drop tariff · ${TL[v]}</b><br>Up to ${t.pdFree} min — Free<br>${t.pdFree} – ${t.pdMax} min — ${rs(t.pd[v])}<br>Above ${t.pdMax} min — normal parking rate`:`<b>${TL[v]} rate · pay at exit</b><br>2 hr ${rs(t.parking[v][0])} · 6 hr ${rs(t.parking[v][1])} · 12 hr ${rs(t.parking[v][2])} · 24 hr ${rs(t.parking[v][3])}`;
+$('#gen').textContent=IN.kind==='pd'?'Print Pick & Drop token':'Generate token & print'};
+document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{IN.kind=b.dataset.k;paint()});
+document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{IN.vtype=b.dataset.t;paint()});
+$('#hel').onclick=()=>{IN.helmet=!IN.helmet;paint()};
+$('#vno').oninput=e=>{e.target.value=e.target.value.toUpperCase()};
+const submit=async force=>{const b=$('#gen');b.disabled=true;try{const r=await api('/api/entry',{kind:IN.kind,vtype:IN.vtype,vehicleNo:$('#vno').value,mobile:$('#mob').value,helmet:IN.kind==='parking'&&IN.helmet,force});IN.helmet=false;go('token',r.ticket)}catch(e){if(e.data?.duplicate&&confirm(e.message+'\n\nPhir bhi naya token banaye?'))return submit(true);toast(e.message)}finally{b&&(b.disabled=false)}};
+$('#gen').onclick=()=>submit(false);paint();setTimeout(()=>$('#vno').focus(),100)};
+
+function slipHTML(t,out){const c=S.cfg;const qr=P.qr&&!out?qrSVG('BKSC:'+t.id,3):'';
+return `<div class="slip"><b>${esc(c.short)} Parking · ${esc(c.agency)}</b><div>${esc(c.stationLong)}</div><hr>
+${out?'<b>EXIT RECEIPT</b>':''}<div class="tk">${esc(t.token_no)}</div><div style="font-size:18px;font-weight:800">${esc(t.vehicle_no)}</div><div>${TL[t.vtype]} · ${t.kind==='pd'?'Pick & Drop':t.kind==='pass'?'Monthly Pass':'Parking'}</div><hr>
+<div class="kv"><span>In time</span><b>${dt(t.in_at)}</b></div>${out?`<div class="kv"><span>Out time</span><b>${dt(t.out_at)}</b></div><div class="kv"><span>Duration</span><b>${dur(t.minutes)}</b></div><div class="kv"><span>Slab</span><b>${esc(t.slab)}</b></div>${t.amt_helmet?`<div class="kv"><span>Helmet</span><b>${rs(t.amt_helmet)}</b></div>`:''}${t.amt_penalty?`<div class="kv"><span>Lost token</span><b>${rs(t.amt_penalty)}</b></div>`:''}<hr><div class="kv" style="font-size:17px"><span>TOTAL (${esc(t.pay_mode)})</span><b>${rs(t.amount)}</b></div>`:`<div class="kv"><span>Helmet</span><b>${t.helmet?'Yes':'No'}</b></div>`}
+${qr?`<div class="qr">${qr}</div>`:''}<hr><div style="font-size:11px">${out?'Thank you · Happy journey':'Pay at exit as per railway tariff'}<br>GSTIN ${esc(c.gstin)} · Ph ${esc(c.phone)}</div></div>`}
+function qrSVG(text,cell){if(!window.qrcode)return '';const q=qrcode(0,'M');q.addData(text);q.make();return q.createSvgTag(cell,2)}
+
+V.token=t=>{nav(true);
+app.innerHTML=`${bar('Token printed','vin')}<div class="wrap"><div class="card" style="text-align:center"><div style="font-size:40px">✅</div><b>Token ${esc(t.token_no)} generated</b>${t.kind==='pass'?'<div><span class="pill g">Monthly pass vehicle — no charge</span></div>':''}<div class="mut" id="pst">${P.method==='off'?'Printing off':''}</div></div>
+${slipHTML(t,false)}<div style="height:14px"></div><button class="btn g" onclick="go('vin')">Next vehicle</button><div style="height:10px"></div>
+<div class="two"><button class="btn o" id="rp">🖨 Reprint</button><button class="btn o" id="wa">WhatsApp</button></div></div>`;
+$('#rp').onclick=()=>printTicket(t,false);$('#wa').onclick=()=>wa(t,false);
+if(P.autoIn)printTicket(t,false)};
+
+function wa(t,out){const c=S.cfg;const msg=`${c.short} Parking · ${c.agency}\nToken: ${t.token_no}\nVehicle: ${t.vehicle_no} (${TL[t.vtype]})\nIn: ${dt(t.in_at)}`+(out?`\nOut: ${dt(t.out_at)}\nDuration: ${dur(t.minutes)}\nPaid: ₹${t.amount} (${t.pay_mode})`:`\nPay at exit as per railway tariff`);
+const n=(t.mobile||'').replace(/\D/g,'');window.open('https://wa.me/'+(n?'91'+n.slice(-10):'')+'?text='+encodeURIComponent(msg))}
+
+// ---------- OUT / scan ----------
+let stream=null,scanT=null;
+function stopCam(){if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}clearTimeout(scanT)}
+V.scan=async()=>{nav(true);
+app.innerHTML=`${bar('Vehicle OUT')}<div class="wrap"><div class="card"><video id="vid" playsinline muted hidden></video><button class="btn" id="cam">📷 Scan token QR</button>
+<label class="l">Or enter token no. / vehicle no.</label><div class="row"><input id="q" class="vno f1" placeholder="T-0482 / 482 / JH09AK4521"><button class="btn" style="width:auto;padding:13px 18px" id="go">Go</button></div></div>
+<p class="mut">Tip: sirf number bhi chalega (482 = T-0482). Pick & Drop ke liye PD-0215 likhein.</p></div>`;
+const find=async q=>{if(!q)return;try{const r=await api('/api/lookup?q='+encodeURIComponent(q));stopCam();go('exit',r.ticket)}catch(e){toast(e.message)}};
+$('#go').onclick=()=>find($('#q').value.trim());$('#q').onkeydown=e=>{if(e.key==='Enter')find(e.target.value.trim())};
+$('#cam').onclick=async()=>{try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});const v=$('#vid');v.hidden=false;v.srcObject=stream;await v.play();$('#cam').hidden=true;
+let det=null;if('BarcodeDetector' in window){try{det=new BarcodeDetector({formats:['qr_code']})}catch(e){}}
+if(!det&&!window.jsQR){await new Promise(r=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js';s.onload=r;s.onerror=r;document.head.appendChild(s)})}
+const cv=document.createElement('canvas'),cx=cv.getContext('2d',{willReadFrequently:true});
+const tick=async()=>{if(!stream)return;let val=null;try{if(det){const r=await det.detect(v);if(r[0])val=r[0].rawValue}else if(window.jsQR&&v.videoWidth){cv.width=v.videoWidth;cv.height=v.videoHeight;cx.drawImage(v,0,0);const d=cx.getImageData(0,0,cv.width,cv.height);const r=jsQR(d.data,d.width,d.height);if(r)val=r.data}}catch(e){}
+if(val){navigator.vibrate&&navigator.vibrate(80);find(val)}else scanT=setTimeout(tick,250)};tick()}catch(e){toast('Camera permission chahiye')}}};
+
+let EX={mode:'Cash',lost:false};
+V.exit=t=>{nav(true);EX={mode:'Cash',lost:false};
+const draw=()=>{const l=t.live;const c=S.cfg.tariff;const pen=EX.lost?c.lostToken:0;const total=l.total+pen;
+app.innerHTML=`${bar('Vehicle OUT','scan')}<div class="wrap"><div class="card"><div class="row sp"><span class="big" style="font-size:24px">${esc(t.token_no)}</span><span class="pill g">Token found</span></div><div class="mut">Charge auto calculated</div>
+<div class="row" style="margin-top:10px"><div class="ico">${ICO[t.vtype]}</div><div><b style="font-size:18px">${esc(t.vehicle_no)}</b><div class="mut">${TL[t.vtype]} · ${t.kind==='pd'?'Pick & Drop':t.kind==='pass'?'Monthly Pass':'Parking'}</div></div></div></div>
+<div class="card"><div class="kv2"><span>In time</span><b>${dt(t.in_at)}</b></div><div class="kv2"><span>Out time</span><b>${tm(new Date())}</b></div><div class="kv2"><span>Duration</span><b>${dur(l.minutes)}</b></div>
+${l.note?`<div class="info">${esc(l.note)}</div>`:''}<div class="kv2" style="margin-top:8px"><span>${t.kind==='pd'?'Pick & Drop':'Parking'} (${esc(l.slab)})</span><b>${rs(l.parking)}</b></div><div class="kv2"><span>Helmet</span><b>${l.helmet?rs(l.helmet):'—'}</b></div>
+<div class="tog"><div><b>Lost token</b><div class="mut">Penalty ${rs(c.lostToken)}</div></div><button class="sw ${EX.lost?'on':''}" id="lost"></button></div>
+<div class="row sp" style="margin-top:8px"><b>Collect now</b><span class="amt">${rs(total)}</span></div></div>
+${total>0?`<div class="card"><label class="l" style="margin-top:0">Payment mode</label><div class="seg"><button data-m="Cash" class="${EX.mode==='Cash'?'on':''}">💵 Cash</button><button data-m="UPI" class="${EX.mode==='UPI'?'on':''}">📱 UPI</button></div></div>`:''}
+<button class="btn g" id="col">${total>0?`Collect ${rs(total)} & print receipt`:'Exit & print free slip'}</button></div>`;
+$('#lost').onclick=()=>{EX.lost=!EX.lost;draw()};document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{EX.mode=b.dataset.m;draw()});
+$('#col').onclick=()=>{if(total>0&&EX.mode==='UPI')go('upi',{t,total});else doExit(t,'Cash')}};draw()};
+
+async function doExit(t,mode){try{const r=await api('/api/exit',{id:t.id,payMode:mode,lost:EX.lost});go('done',r.ticket)}catch(e){toast(e.message)}}
+V.upi=({t,total})=>{nav(true);const c=S.cfg;const url=`upi://pay?pa=${encodeURIComponent(c.upiVpa||'')}&pn=${encodeURIComponent(c.upiName||c.agency)}&am=${total}&cu=INR&tn=${encodeURIComponent('Parking '+t.token_no)}`;
+app.innerHTML=`${bar('Collect by UPI','scan')}<div class="wrap"><div class="card" style="text-align:center"><div class="mut">Amount</div><div class="amt">${rs(total)}</div>
+${c.upiVpa?`<div class="qr">${qrSVG(url,6)}</div><div class="mut">Customer scans with any UPI app<br>GPay · PhonePe · Paytm · BHIM</div><div style="margin-top:6px"><b>${esc(c.upiVpa)}</b></div>`:`<div class="info">Admin ne UPI ID set nahi ki hai (Admin → Settings). Customer ko apna stand ka QR scan karayein.</div>`}</div>
+<button class="btn g" id="ok">✓ Payment received</button><div style="height:10px"></div><button class="btn o" id="cash">Customer ne cash diya</button></div>`;
+$('#ok').onclick=()=>doExit(t,'UPI');$('#cash').onclick=()=>doExit(t,'Cash')};
+V.done=t=>{nav(true);app.innerHTML=`${bar('Done','home')}<div class="wrap"><div class="card" style="text-align:center"><div style="font-size:44px">✅</div><b>Payment received · vehicle exited</b><div class="mut">${t.pay_mode} · ${rs(t.amount)}</div></div>
+${slipHTML(t,true)}<div style="height:14px"></div><button class="btn g" onclick="go('scan')">Next exit</button><div style="height:10px"></div><div class="two"><button class="btn o" id="rp">🖨 Reprint</button><button class="btn o" id="wa">WhatsApp</button></div></div>`;
+$('#rp').onclick=()=>printTicket(t,true);$('#wa').onclick=()=>wa(t,true);if(P.autoOut)printTicket(t,true)};
+
+// ---------- Inside ----------
+V.inside=async type=>{nav(true);let f=type||'',q='';
+app.innerHTML=`${bar('Vehicles inside')}<div class="wrap"><input id="s" placeholder="🔍 Search vehicle / token no."><div style="display:flex;gap:6px;overflow:auto;margin:10px 0" id="fl"></div><div class="card list" id="ls">Loading…</div></div>`;
+const load=async()=>{$('#fl').innerHTML=[['','All'],...TYPES.map(t=>[t[0],t[2]])].map(([k,l])=>`<button class="pill ${k===f?'b':''}" style="border:0;padding:8px 14px" data-f="${k}">${l}</button>`).join('');
+document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{f=b.dataset.f;load()});
+try{const rows=await api(`/api/inside?type=${f}&q=${encodeURIComponent(q)}`);$('#ls').innerHTML=rows.length?rows.map(r=>`<div class="it" data-id="${r.id}"><div class="ico">${ICO[r.vtype]}</div><div class="f1"><b>${esc(r.vehicle_no)}</b> ${r.live.minutes>1440?'<span class="pill r">24 hr+</span>':''}<div class="mut">${esc(r.token_no)} · ${TL[r.vtype]} · in ${tm(r.in_at)}</div></div><div style="text-align:right"><div class="mut">${dur(r.live.minutes)}</div><b>now ${rs(r.live.total)}</b></div></div>`).join(''):'<div class="mut">Koi vehicle andar nahi hai</div>';
+document.querySelectorAll('[data-id]').forEach(el=>el.onclick=()=>{const r=rows.find(x=>x.id==el.dataset.id);go('exit',r)})}catch(e){$('#ls').textContent=e.message}};
+let to;$('#s').oninput=e=>{q=e.target.value;clearTimeout(to);to=setTimeout(load,300)};load()};
+
+// ---------- Shift ----------
+V.shift=async()=>{nav(true);app.innerHTML=bar('My shift')+'<div class="wrap mut">Loading…</div>';
+const r=await api('/api/shift');const st=r.stats||{};const u=S.user;
+app.innerHTML=`${bar('My shift')}<div class="wrap"><div class="card"><b>${esc(u.name)}</b><div class="mut">${esc(u.label||'')} · since ${dt(r.shift?.start_at)}</div>
+<div class="stats" style="color:var(--t)"><div style="background:#eef2f7"><b>${st.in||0}</b>IN</div><div style="background:#eef2f7"><b>${st.out||0}</b>OUT</div><div style="background:#eef2f7"><b>${st.passes||0}</b>Passes</div></div></div>
+<div class="card"><div class="kv2"><span>Cash</span><b>${rs(st.cash)}</b></div><div class="kv2"><span>UPI</span><b>${rs(st.upi)}</b></div><div class="kv2"><span><b>Total collection</b></span><b>${rs((st.cash||0)+(st.upi||0))}</b></div></div>
+<div class="card"><label class="l" style="margin-top:0">Cash handed over</label><input id="ch" inputmode="numeric" placeholder="${st.cash||0}">
+<label class="l">Handed to</label><select id="ht"><option value="">Select</option>${r.staff.map(n=>`<option>${esc(n)}</option>`).join('')}<option>Admin / Owner</option></select><div id="mt" style="margin-top:10px"></div></div>
+<button class="btn r" id="cl">Close shift & logout</button><div style="height:10px"></div><button class="btn o" onclick="logout()">Logout only (shift open rahega)</button></div>`;
+const chk=()=>{const v=$('#ch').value;if(v==='')return $('#mt').innerHTML='';const d=Number(v)-(st.cash||0);$('#mt').innerHTML=d===0?'<span class="pill g">✓ Matches system cash</span>':`<span class="pill r">${d<0?rs(-d)+' short':rs(d)+' extra'}</span>`};$('#ch').oninput=chk;
+$('#cl').onclick=async()=>{if($('#ch').value===''){toast('Cash amount daalo');return}if(!confirm('Shift close karein?'))return;try{const x=await api('/api/shift/close',{cashHanded:$('#ch').value,handedTo:$('#ht').value});toast(x.matched?'Shift closed · cash matched':'Shift closed · mismatch admin ko dikhega');logout()}catch(e){toast(e.message)}}};
+
+// ---------- Printer ----------
+V.profile=()=>{nav(true);const sw=(k,t,d)=>`<div class="tog"><div><b>${t}</b><div class="mut">${d}</div></div><button class="sw ${P[k]?'on':''}" data-k="${k}"></button></div>`;
+app.innerHTML=`${bar('Printer settings')}<div class="wrap"><div class="card"><label class="l" style="margin-top:0">Print method</label>
+<select id="pm"><option value="rawbt">RawBT app (any Bluetooth thermal printer)</option><option value="ble">Bluetooth direct (BLE printer)</option><option value="system">System print (Android print)</option><option value="off">Off</option></select>
+<div class="info" id="pmi"></div><div id="ble" style="margin-top:10px"></div></div>
+<div class="card">${sw('autoIn','Auto print on entry','Token prints on Generate')}${sw('autoOut','Auto print on exit','Receipt with duration & amount')}${sw('qr','Print QR on token','Fast scan at exit')}
+<div class="tog"><div><b>Paper size</b></div><div class="seg" style="width:150px"><button data-p="58">58 mm</button><button data-p="80">80 mm</button></div></div></div>
+<div class="card"><b>Header on slip</b><div class="mut" style="margin-top:6px">${esc(S.cfg?.agency)} · Parking ${esc(S.cfg?.station)} · GSTIN ${esc(S.cfg?.gstin)} · Ph ${esc(S.cfg?.phone)}</div><div class="mut">(Admin panel → Settings se badlein)</div></div>
+<button class="btn" id="tp">Test print</button><div style="height:10px"></div><button class="btn o" onclick="logout()">Logout · ${esc(S.user?.name)}</button></div>`;
+const paint=()=>{$('#pm').value=P.method;document.querySelectorAll('[data-k]').forEach(b=>b.classList.toggle('on',!!P[b.dataset.k]));document.querySelectorAll('[data-p]').forEach(b=>b.classList.toggle('on',P.paper==b.dataset.p));
+$('#pmi').innerHTML={rawbt:'Play Store se <b>RawBT</b> app install karke usme printer pair karein (one time). Fir har token automatic print hoga. <a href="https://play.google.com/store/apps/details?id=ru.a402d.rawbtprinter" target="_blank">Install RawBT</a>',ble:'BLE printer ko Chrome se direct connect karein. Har baar app khulne par ek baar "Connect" dabana pad sakta hai.',system:'Android print dialog khulega (PDF/Wi-Fi printers).',off:'Sirf screen par slip dikhega.'}[P.method];
+$('#ble').innerHTML=P.method==='ble'?`<button class="btn o" id="bc">${BT.ch?'✅ Connected — '+esc(BT.name):'🔗 Connect Bluetooth printer'}</button>`:'';if($('#bc'))$('#bc').onclick=async()=>{try{await btConnect(true);paint()}catch(e){toast(e.message)}}};
+$('#pm').onchange=e=>{P.method=e.target.value;saveP();paint()};document.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{P[b.dataset.k]=!P[b.dataset.k];saveP();paint()});
+document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{P.paper=Number(b.dataset.p);saveP();paint()});
+$('#tp').onclick=()=>printTicket({id:0,token_no:'T-TEST',vehicle_no:'JH 09 AB 1234',vtype:'car',kind:'parking',in_at:new Date(),helmet:false},false);paint()};
+
+// ---------- ESC/POS printing ----------
+function escpos(t,out){const c=S.cfg,W=P.paper==80?48:32;const b=[];const enc=s=>{for(const ch of String(s).replace(/₹/g,'Rs.').replace(/[–—]/g,'-').replace(/·/g,'-').replace(/≤/g,'<=').normalize('NFKD').replace(/[^\x20-\x7e\n]/g,''))b.push(ch.charCodeAt(0))};
+const cmd=(...a)=>b.push(...a);const ln=s=>{enc(s);cmd(10)};const kv=(k,v)=>{k=String(k);v=String(v).replace(/₹/g,'Rs.');ln(k+' '.repeat(Math.max(1,W-k.length-v.length))+v)};const hr=()=>ln('-'.repeat(W));
+cmd(27,64,27,97,1,27,69,1);ln(`${c.short} Parking - ${c.agency}`);cmd(27,69,0);ln(c.stationLong);hr();if(out){cmd(27,69,1);ln('EXIT RECEIPT');cmd(27,69,0)}
+cmd(29,33,17);ln(t.token_no);cmd(29,33,1);ln(t.vehicle_no);cmd(29,33,0);ln(TL[t.vtype]+' - '+(t.kind==='pd'?'Pick & Drop':t.kind==='pass'?'Monthly Pass':'Parking'));cmd(27,97,0);hr();
+kv('In time',dt(t.in_at));if(out){kv('Out time',dt(t.out_at));kv('Duration',dur(t.minutes));kv('Slab',t.slab);if(t.amt_helmet)kv('Helmet','Rs.'+t.amt_helmet);if(t.amt_penalty)kv('Lost token','Rs.'+t.amt_penalty);hr();cmd(27,69,1);kv('TOTAL ('+t.pay_mode+')','Rs.'+t.amount);cmd(27,69,0)}else kv('Helmet',t.helmet?'Yes':'No');
+cmd(27,97,1);if(P.qr&&!out){const d=[...new TextEncoder().encode('BKSC:'+t.id)],L=d.length+3;cmd(29,40,107,4,0,49,65,50,0,29,40,107,3,0,49,67,7,29,40,107,3,0,49,69,49,29,40,107,L&255,L>>8,49,80,48,...d,29,40,107,3,0,49,81,48);cmd(10)}
+hr();ln(out?'Thank you - Happy journey':'Pay at exit as per railway tariff');ln(`GSTIN ${c.gstin} Ph ${c.phone}`);cmd(10,10,10,29,86,66,0);return new Uint8Array(b)}
+const BT={dev:null,ch:null,name:''};
+const SVC=[0x18f0,0xff00,0xfee7,0xffe0,0xae30,'e7810a71-73ae-499d-8c15-faa9aef0c3f2','49535343-fe7d-4ae5-8fa9-9fafd205e455','0000ff00-0000-1000-8000-00805f9b34fb'];
+async function btConnect(pick){if(!navigator.bluetooth)throw new Error('Is browser me Bluetooth support nahi — RawBT use karein');
+if(!BT.dev||pick){BT.dev=await navigator.bluetooth.requestDevice({acceptAllDevices:true,optionalServices:SVC})}
+const g=await BT.dev.gatt.connect();for(const s of await g.getPrimaryServices()){for(const ch of await s.getCharacteristics()){if(ch.properties.write||ch.properties.writeWithoutResponse){BT.ch=ch;BT.name=BT.dev.name||'Printer';return}}}throw new Error('Printer ka write channel nahi mila')}
+async function printTicket(t,out){try{if(P.method==='off')return;
+if(P.method==='system'){const f=document.createElement('iframe');f.style.cssText='position:fixed;width:0;height:0;border:0';document.body.appendChild(f);f.contentDocument.write(`<html><head><style>body{margin:0;font-family:monospace;width:${P.paper==80?'72':'48'}mm}.slip{text-align:center;font-size:12px}.tk{font-size:24px;font-weight:800}.kv{display:flex;justify-content:space-between}hr{border:0;border-top:1px dashed #000}.qr svg{width:120px;height:120px}</style></head><body>${slipHTML(t,out)}</body></html>`);f.contentDocument.close();setTimeout(()=>{f.contentWindow.print();setTimeout(()=>f.remove(),2000)},300);return}
+const data=escpos(t,out);
+if(P.method==='rawbt'){let s='';data.forEach(x=>s+=String.fromCharCode(x));location.href='intent:base64,'+btoa(s)+'#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;';return}
+if(P.method==='ble'){if(!BT.ch)await btConnect(false);for(let i=0;i<data.length;i+=100){const part=data.slice(i,i+100);BT.ch.properties.writeWithoutResponse?await BT.ch.writeValueWithoutResponse(part):await BT.ch.writeValue(part)}toast('Printed')}}catch(e){toast('Print error: '+e.message,3500)}}
+
+if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
+go(S.token?'home':'login');
+</script></body></html>
