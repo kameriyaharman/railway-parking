@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "BKSC Parking",
+    "slug": "bksc-parking",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0f2a4a"
+    },
+    "android": {
+      "package": "com.nikitaagencies.bkscparking",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0f2a4a"
+      },
+      "edgeToEdgeEnabled": true,
+      "softwareKeyboardLayoutMode": "pan",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.VIBRATE"
+      ],
+      "blockedPermissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.SYSTEM_ALERT_WINDOW",
+        "android.permission.RECORD_AUDIO"
+      ]
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Token ka QR scan karne ke liye camera chahiye",
+          "recordAudioAndroid": false
+        }
+      ]
+    ]
+  }
+}

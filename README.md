@@ -44,3 +44,20 @@ Easiest: connect this repo to a Railway service (Dockerfile included) + add Post
 The attendant app is a PWA: open `/app` in Chrome on Android → ⋮ → **Install app**.
 For a Play-Store style APK, put the live `/app` URL into https://www.pwabuilder.com → Package → Android (Trusted Web Activity).
 Printing uses the free **RawBT** app for classic Bluetooth thermal printers.
+
+## React Native attendant app (`mobile/`)
+Expo SDK 54 · React Native 0.81 · TypeScript. Talks to the same API as the web app.
+
+- All attendant screens: login (stand + mobile + PIN), home, Vehicle IN (Parking / Pick & Drop, 5 types, helmet),
+  token with QR, exit by camera QR scan or token/vehicle no., auto charge, Cash / UPI QR, receipt, WhatsApp slip,
+  vehicles inside, shift close with cash handover, printer settings.
+- **Direct Bluetooth printing**: own native module `mobile/modules/bt-printer` (Kotlin, classic SPP) sends ESC/POS
+  to any paired 58/80 mm thermal printer. RawBT app is available as a fallback.
+- Server URL is editable in the app (Printer tab) — default `https://bksc-parking-production.up.railway.app`.
+
+### Build the APK
+- **GitHub Actions** (no setup): push to GitHub → Actions → "Android APK" → download artifact `bksc-parking-apk`.
+- **Mac with Android Studio**: `cd mobile && ./build-apk.sh` → `mobile/BKSC-Parking.apk`.
+
+Release APK is signed with the default debug key (fine for installing on staff phones). For Play Store,
+create an upload keystore and configure signing (or use `eas build`).
