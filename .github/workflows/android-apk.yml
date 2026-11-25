@@ -31,18 +31,35 @@ jobs:
         run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
       - run: npm ci
       - run: npx expo prebuild --platform android --no-install --clean
+      - name: Split APK per phone CPU (no emulator x86 code)
+        run: |
+          cat >> android/app/build.gradle <<'GRADLE'
+
+          android {
+              splits {
+                  abi {
+                      enable true
+                      reset()
+                      include "arm64-v8a", "armeabi-v7a"
+                      universalApk false
+                  }
+              }
+          }
+          GRADLE
       - name: Gradle assembleRelease
         working-directory: mobile/android
-        run: ./gradlew assembleRelease --no-daemon
+        run: ./gradlew assembleRelease --no-daemon -PreactNativeArchitectures=arm64-v8a,armeabi-v7a
       - uses: actions/upload-artifact@v4
         with:
           name: bksc-parking-apk
-          path: mobile/android/app/build/outputs/apk/release/app-release.apk
+          path: mobile/android/app/build/outputs/apk/release/*.apk
       - name: Publish APK as GitHub Release (latest)
         working-directory: mobile
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          cp android/app/build/outputs/apk/release/app-release.apk BKSC-Parking.apk
+          ls -la android/app/build/outputs/apk/release/
+          cp android/app/build/outputs/apk/release/app-arm64-v8a-release.apk BKSC-Parking.apk
+          cp android/app/build/outputs/apk/release/app-armeabi-v7a-release.apk BKSC-Parking-32bit.apk
           gh release delete apk-latest --yes --cleanup-tag || true
-          gh release create apk-latest BKSC-Parking.apk --title "BKSC Parking APK (build ${{ github.run_number }})" --notes "Attendant app — commit ${{ github.sha }}" --latest
+          gh release create apk-latest BKSC-Parking.apk BKSC-Parking-32bit.apk --title "BKSC Parking APK (build ${{ github.run_number }})" --notes "BKSC-Parking.apk = normal phones (64-bit). BKSC-Parking-32bit.apk = old/cheap 32-bit phones. Commit ${{ github.sha }}" --latest

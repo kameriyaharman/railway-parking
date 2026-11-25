@@ -1,5 +1,5 @@
 // Shared UI building blocks (design: navy + amber, matches the admin panel).
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import React from "react";
 import { ActivityIndicator, Pressable, StyleSheet, Text, TextInput, View, type StyleProp, type TextInputProps, type ViewStyle } from "react-native";
 import QRCode from "react-native-qrcode-svg";
