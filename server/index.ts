@@ -19,8 +19,11 @@ const DEFAULT_CONFIG = {
     parking: { cycle: [6, 9, 12, 15], bike: [12, 15, 18, 24], auto: [12, 18, 24, 42], car: [18, 30, 36, 59], bus: [30, 36, 42, 70] },
     perDay: { cycle: 15, bike: 24, auto: 42, car: 59, bus: 70 },
     pass: { cycle: 236, bike: 472, auto: 885, car: 1180, bus: 0 },
-    pd: { cycle: 10, bike: 10, auto: 10, car: 20, bus: 30 },
-    pdFree: 15, pdMax: 30, helmet: 12, lostToken: 50,
+    // Pick & Drop: ≤pdFree free · ≤pdMax → pd · ≤pdHour → pd2 · beyond → pdHourly × every started hour
+    pd: { cycle: 25, bike: 25, auto: 25, car: 25, bus: 25 },
+    pd2: { cycle: 60, bike: 60, auto: 60, car: 60, bus: 60 },
+    pdHourly: { cycle: 60, bike: 60, auto: 60, car: 60, bus: 60 },
+    pdFree: 15, pdMax: 30, pdHour: 60, helmet: 12, lostToken: 50,
   },
   alerts: { dailySummary: true, full90: true, cashMismatch: true },
 };
@@ -49,6 +52,17 @@ async function migrate() {
   }
   const [s] = await sql`select count(*)::int n from settings where key='config'`;
   if (s.n === 0) await sql`insert into settings(key,value) values('config', ${JSON.stringify(DEFAULT_CONFIG)}::jsonb)`;
+  else {
+    // One-time switch to the new Pick & Drop tariff (Nov 2026): 15 free · 30 → ₹25 · 60 → ₹60 · then ₹60/hr.
+    const [cur] = await sql`select value from settings where key='config'`;
+    const v = typeof cur.value === "string" ? JSON.parse(cur.value) : cur.value;
+    if (!v.tariff?.pd2) {
+      const t = DEFAULT_CONFIG.tariff;
+      v.tariff = { ...(v.tariff || {}), pd: t.pd, pd2: t.pd2, pdHourly: t.pdHourly, pdFree: 15, pdMax: 30, pdHour: 60 };
+      await sql`update settings set value=${JSON.stringify(v)}::jsonb where key='config'`;
+      await audit("system", "update_config", { keys: ["tariff (new Pick & Drop rates)"] });
+    }
+  }
   const [a] = await sql`select count(*)::int n from staff where role='admin'`;
   if (a.n === 0) {
     const mobile = Bun.env.ADMIN_MOBILE || "9431363844";
@@ -88,7 +102,8 @@ export function calcCharge(cfg: any, kind: string, vtype: string, minutes: numbe
   else if (kind === "pd") {
     if (m <= t.pdFree) { slab = `≤${t.pdFree} min`; note = `Within ${t.pdFree} min — FREE`; }
     else if (m <= t.pdMax) { parking = t.pd[vtype]; slab = `${t.pdFree}–${t.pdMax} min`; note = `${t.pdFree} – ${t.pdMax} min — Pick & Drop charge`; }
-    else { parkCalc(); note = `Above ${t.pdMax} min — moved to parking rate`; }
+    else if (m <= t.pdHour) { parking = t.pd2[vtype]; slab = `${t.pdMax}–${t.pdHour} min`; note = `${t.pdMax} – ${t.pdHour} min — Pick & Drop charge`; }
+    else { const hrs = Math.ceil(m / 60); parking = hrs * t.pdHourly[vtype]; slab = `${hrs} hr × ₹${t.pdHourly[vtype]}`; note = `Above ${t.pdHour} min — ₹${t.pdHourly[vtype]} per hour`; }
   } else parkCalc();
   const days = Math.ceil(m / 1440);
   const h = helmet ? days * t.helmet : 0;

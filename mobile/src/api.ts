@@ -10,8 +10,11 @@ export type Tariff = {
   perDay: Record<VType, number>;
   pass: Record<VType, number>;
   pd: Record<VType, number>;
+  pd2: Record<VType, number>;
+  pdHourly: Record<VType, number>;
   pdFree: number;
   pdMax: number;
+  pdHour: number;
   helmet: number;
   lostToken: number;
 };

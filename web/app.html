@@ -100,7 +100,7 @@ app.innerHTML=`${bar('Vehicle IN')}<div class="wrap"><div class="card">
 <button class="btn g" id="gen">Generate token & print</button></div>`;
 const paint=()=>{document.querySelectorAll('.seg button').forEach(b=>b.classList.toggle('on',b.dataset.k===IN.kind));document.querySelectorAll('.chip').forEach(b=>b.classList.toggle('on',b.dataset.t===IN.vtype));
 $('#hel').classList.toggle('on',IN.helmet);$('#hrow').style.display=IN.kind==='pd'?'none':'';
-const v=IN.vtype;$('#rate').innerHTML=IN.kind==='pd'?`<b>Pick & Drop tariff · ${TL[v]}</b><br>Up to ${t.pdFree} min — Free<br>${t.pdFree} – ${t.pdMax} min — ${rs(t.pd[v])}<br>Above ${t.pdMax} min — normal parking rate`:`<b>${TL[v]} rate · pay at exit</b><br>2 hr ${rs(t.parking[v][0])} · 6 hr ${rs(t.parking[v][1])} · 12 hr ${rs(t.parking[v][2])} · 24 hr ${rs(t.parking[v][3])}`;
+const v=IN.vtype;$('#rate').innerHTML=IN.kind==='pd'?`<b>Pick & Drop tariff · ${TL[v]}</b><br>Up to ${t.pdFree} min — Free<br>${t.pdFree} – ${t.pdMax} min — ${rs(t.pd[v])}<br>${t.pdMax} – ${t.pdHour} min — ${rs(t.pd2[v])}<br>Above ${t.pdHour} min — ${rs(t.pdHourly[v])} per hour`:`<b>${TL[v]} rate · pay at exit</b><br>2 hr ${rs(t.parking[v][0])} · 6 hr ${rs(t.parking[v][1])} · 12 hr ${rs(t.parking[v][2])} · 24 hr ${rs(t.parking[v][3])}`;
 $('#gen').textContent=IN.kind==='pd'?'Print Pick & Drop token':'Generate token & print'};
 document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{IN.kind=b.dataset.k;paint()});
 document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{IN.vtype=b.dataset.t;paint()});

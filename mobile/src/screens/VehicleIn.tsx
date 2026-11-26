@@ -69,7 +69,8 @@ export function VehicleIn() {
                   <Text style={s.b}>Pick & Drop tariff · {TL[vtype]}</Text>
                   <Text>Up to {t.pdFree} min — Free</Text>
                   <Text>{t.pdFree} – {t.pdMax} min — {rs(t.pd[vtype])}</Text>
-                  <Text>Above {t.pdMax} min — normal parking rate</Text>
+                  <Text>{t.pdMax} – {t.pdHour} min — {rs(t.pd2?.[vtype])}</Text>
+                  <Text>Above {t.pdHour} min — {rs(t.pdHourly?.[vtype])} per hour</Text>
                 </>
               ) : (
                 <>
