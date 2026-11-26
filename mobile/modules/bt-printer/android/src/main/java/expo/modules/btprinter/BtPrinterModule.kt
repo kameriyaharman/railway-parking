@@ -2,6 +2,7 @@ package expo.modules.btprinter
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothSocket
 import android.content.Context
@@ -34,6 +35,28 @@ class BtPrinterModule : Module() {
     connectedAddress = null
   }
 
+  /** Cheap 58 mm printers differ: try secure SPP, then insecure SPP, then raw RFCOMM channel 1. */
+  private fun connectSocket(device: BluetoothDevice): BluetoothSocket {
+    val attempts: List<() -> BluetoothSocket> = listOf(
+      { device.createRfcommSocketToServiceRecord(sppUuid) },
+      { device.createInsecureRfcommSocketToServiceRecord(sppUuid) },
+      { device.javaClass.getMethod("createRfcommSocket", Int::class.javaPrimitiveType).invoke(device, 1) as BluetoothSocket },
+    )
+    var last: Exception? = null
+    for (make in attempts) {
+      var sock: BluetoothSocket? = null
+      try {
+        sock = make()
+        sock.connect()
+        return sock
+      } catch (e: Exception) {
+        last = e
+        try { sock?.close() } catch (_: Exception) {}
+      }
+    }
+    throw CodedException("ERR_CONNECT", "Printer se connect nahi hua — printer ON hai aur phone me paired hai? (${last?.message})", last)
+  }
+
   override fun definition() = ModuleDefinition {
     Name("BtPrinter")
 
@@ -55,15 +78,10 @@ class BtPrinterModule : Module() {
           closeSocket()
           val a = adapter() ?: throw CodedException("ERR_NO_BLUETOOTH", "Is phone me Bluetooth nahi hai", null)
           if (!a.isEnabled) throw CodedException("ERR_BLUETOOTH_OFF", "Bluetooth ON karein", null)
-          a.cancelDiscovery()
+          // cancelDiscovery() needs BLUETOOTH_SCAN on Android 12+; we never start discovery, so it's optional.
+          try { a.cancelDiscovery() } catch (_: SecurityException) {} catch (_: Exception) {}
           val device = a.getRemoteDevice(address)
-          val fresh = device.createRfcommSocketToServiceRecord(sppUuid)
-          try {
-            fresh.connect()
-          } catch (e: Exception) {
-            try { fresh.close() } catch (_: Exception) {}
-            throw CodedException("ERR_CONNECT", "Printer se connect nahi hua — printer ON hai? (${e.message})", e)
-          }
+          val fresh = connectSocket(device)
           socket = fresh
           connectedAddress = address
           s = fresh
